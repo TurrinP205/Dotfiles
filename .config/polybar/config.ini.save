@@ -1,0 +1,92 @@
+[colors]
+background = #FFFFFF
+foreground = #2D2D2D
+primary = #444444
+
+[bar/exemple]
+; Barra Central
+width = 30%
+height = 28
+offset-x = 35%
+offset-y = 12
+radius = 14
+fixed-center = true
+override-redirect = true
+wm-restack=i3
+background = ${colors.background}
+foreground = ${colors.foreground}
+border-size = 2
+border-color = #00000000
+
+padding = 2
+module-margin = 1
+; Esto fuerza a que salgan en tu pantalla principal
+monitor = ${env:MONITOR:}
+; Usando la fuente que descargaste
+font-0 = "JetBrainsMono Nerd Font:size=10;2"
+
+modules-center = xworkspaces date
+
+[bar/top]
+; Barra Derecha (Red y Batería)
+width = 20%
+height = 28
+offset-x = 78%
+offset-y = 12
+radius = 14
+fixed-center = true
+override-redirect = true
+wm-restack=i3
+background = #FEFFFF
+foreground = #1A1B26
+border-size = 2
+border-color = #DDDDDD
+
+padding-left = 2
+padding-right = 2
+module-margin = 1
+
+font-0 = "JetBrainsMono Nerd Font:size=10;2"
+
+modules-center = network battery
+; Esto fuerza a que salgan en tu pantalla principal
+monitor = ${env:MONITOR:}
+[module/network]
+type = internal/network
+interface = wlp3s0
+; Iconos de Nerd Fonts
+label-connected = "   %essid% "
+label-disconnected = " 󰖪 "
+
+[module/battery]
+type = internal/battery
+full-at = 99
+low-at = 10
+; Si no aparece la batería, cambia BAT0 por BAT1
+battery = BAT0
+adapter = AC
+poll-interval = 5
+
+format-charging = <label-charging>
+format-discharging = <label-discharging>
+
+label-charging = " 󰂄 %percentage%% "
+label-discharging = " 󰁹 %percentage%% "
+
+[module/xworkspaces]
+type = internal/xworkspaces
+label-active = %name%
+label-active-background = #E0E0E0
+label-active-underline = #2D2D2D
+label-active-padding = 1
+label-occupied = %name%
+label-occupied-padding = 1
+
+[module/date]
+type = internal/date
+interval = 1
+date = %H:%M
+label = %date%
+[settings]
+screenchange-reload = true
+pseudo-transparency = true

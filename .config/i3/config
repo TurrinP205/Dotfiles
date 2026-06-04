@@ -1,0 +1,192 @@
+# i3 config file (v4)
+
+# Modificador principal (debe ir primero, antes de cualquier bindsym)
+set $mod Mod4
+
+# Fuente para títulos de ventanas
+font pango:monospace 8
+
+# Autostart XDG
+exec --no-startup-id dex --autostart --environment i3
+
+# NetworkManager applet
+exec --no-startup-id nm-applet
+exec --no-startup-id sleep 1 && ~/.config/i3/lock.sh
+
+# Brillo y volumen
+bindsym XF86MonBrightnessUp exec brightnessctl set +5%
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +10%
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -10%
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+# Direcciones de movimiento
+set $up l
+set $down k
+set $left j
+set $right semicolon
+
+# Arrastrar ventanas flotantes con $mod + clic
+floating_modifier $mod
+tiling_drag modifier titlebar
+
+# Terminal
+bindsym $mod+Return exec kitty
+
+# Cerrar ventana
+bindsym $mod+Shift+q kill
+
+# Lanzador de aplicaciones
+bindsym $mod+d exec --no-startup-id dmenu_run -b
+
+# Cambiar foco
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# Mover ventana
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# Split
+bindsym $mod+h split h
+bindsym $mod+v split v
+
+# Pantalla completa
+bindsym $mod+f fullscreen toggle
+
+# Layouts
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Flotante
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+
+# Contenedor padre
+bindsym $mod+a focus parent
+
+# Scratchpad
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
+
+# Workspaces
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+bindsym $mod+0 workspace number $ws10
+
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9
+bindsym $mod+Shift+0 move container to workspace number $ws10
+
+# Recargar / reiniciar / salir
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+# Modo resize (Corregido con las teclas directas de X11 y llave limpia)
+mode "resize" {
+        bindsym j           resize shrink width 10 px or 10 ppt
+        bindsym k           resize grow height 10 px or 10 ppt
+        bindsym l           resize shrink height 10 px or 10 ppt
+        bindsym semicolon   resize grow width 10 px or 10 ppt
+
+        bindsym Left        resize shrink width 10 px or 10 ppt
+        bindsym Down        resize grow height 10 px or 10 ppt
+        bindsym Up          resize shrink height 10 px or 10 ppt
+        bindsym Right       resize grow width 10 px or 10 ppt
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# Fondo de pantalla
+exec_always --no-startup-id ~/.config/i3/random-wallpaper.sh
+
+# Polybar
+exec_always --no-startup-id ~/.config/polybar/launch.sh
+
+# Gaps
+gaps inner 3
+gaps outer 1
+gaps top 20
+
+# CONFIGURACIÓN GENERAL DE BORDES (Unificada sin duplicados)
+default_border pixel 1
+default_floating_border pixel 0
+for_window [class=".*"] border pixel 1
+
+# Picom (compositor)
+exec_always --no-startup-id picom &
+
+# Atajo de bloqueo
+bindsym $mod+Shift+x exec --no-startup-id ~/.config/i3/lock.sh
+
+# Atajo thunar 
+bindsym $mod+Shift+t exec --no-startup-id thunar 
+
+# Atajo para capturar la pantalla 
+bindsym Print exec --no-startup-id scrot -s ~/_%Y-%m-%d_%H%M%S.png
+ 
+# CONFIGURACIÓN DE COLORES
+# Clase                 Borde   Fondo   Texto   Indicador Borde_Hijo
+client.focused          #ffffff #ffffff #000000 #ffffff   #ffffff
+client.focused_inactive #666666 #666666 #ffffff #666666   #666666
+client.unfocused        #000033 #000033 #000033 #000033   #000033
+
+
+# ====================================================
+# CONFIGURACIÓN DE VENTANAS FLOTANTES ESPECIALES
+# ====================================================
+
+# Reglas de intercepción inicial (Forzar flotado y remover bordes)
+for_window [class="fetch-term"] floating enable; border none
+for_window [class="music-term"] floating enable; border none
+
+# 1. Fastfetch (Lanzamiento y reposicionamiento con retraso independiente)
+exec --no-startup-id kitty --class fetch-term -e bash -c 'fastfetch --logo-type kitty --logo-preserve-aspect-ratio --logo "~/Pictures/clu.jpg" --logo-height 16 --logo-width 22 --logo-padding-top 2 --logo-padding-right 4; exec bash'
+exec --no-startup-id sleep 0.8 && i3-msg '[class="fetch-term"] resize set 650 400, move absolute position 5 361'
+
+# 2. MPD y NCMPCPP (Lanzamiento y reposicionamiento con retraso independiente)
+#exec --no-startup-id mpd
+#exec --no-startup-id kitty --class music-term -e ncmpcpp
+#exec --no-startup-id sleep 0.8 && i3-msg '[class="music-term"] resize set 860 350, move absolute position 502 px 23 px'
